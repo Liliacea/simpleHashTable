@@ -62,36 +62,48 @@ public class SimpleHashTable<K, V> {
     public Iterator<K> keyIterator() {
         return new Iterator<K>() {
             int currentNodeNumber = 1;
-            int currentArrayIndex = 1;
+            int currentArrayIndex = 0;
             Node<K, V> currentNode;
 
             @Override
             public boolean hasNext() {
-                return currentNodeNumber < size;
+
+
+                return currentNodeNumber <= size;
             }
 
             @Override
             public K next() {
                 if (hasNext()) {
                     currentNode = table[currentArrayIndex];
+                    while (currentNode == null) {
+                        currentArrayIndex++;
+                        currentNode = table[currentArrayIndex];
+                    }
 
-                    currentArrayIndex++;
 
-                    if (currentNode != null) {
                         currentNodeNumber++;
+                        currentArrayIndex++;
+
                         K key = currentNode.getKey();
 
                         return key;
 
-                    } else {
-                        throw new NoSuchElementException();
-                    }
 
+                } else {
+                    throw new NoSuchElementException();
                 }
-                return null;
+
+
             }
+
+
+
+
+
         };
-    }
+
+            }
 
 
     private Node<K, V>[] table;
